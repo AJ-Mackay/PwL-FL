@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,23 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/authcheck', function () {
+    if(Auth::check()){
+        return "The user is logged in";
+    }
+});
+
+Route::get('/authtest', function () {
+
+    $email = 'test@test.com';
+    $password = 'tester123';
+
+    if(Auth::attempt(['email'=>$email, 'password'=>$password])){
+        return redirect()->intended('/admin');
+    }
+});
+
+Route::get('/kick', function () {
+    Auth::logout();
+});
